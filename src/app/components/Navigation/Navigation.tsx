@@ -1,8 +1,14 @@
+'use client'
 import styles from './navigation.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState } from 'react';
 
 export default function Navigation() {
+  const [isOnBurger, setConditionBurger] = useState<boolean>(false);
+  const handleClick = () => {
+    setConditionBurger(!isOnBurger);
+  };
   return (
     <nav className={styles.main__nav}>
       <div className={styles.nav__logo}>
@@ -14,11 +20,12 @@ export default function Navigation() {
           alt={'logo'}
         />
       </div>
-      <div className={styles.nav__burger}>
+      <div onClick={handleClick} className={styles.nav__burger}>
         <span className={styles.burger__line}></span>
         <span className={styles.burger__line}></span>
         <span className={styles.burger__line}></span>
       </div>
+      {isOnBurger && (
       <div className={styles.nav__menu}>
         <ul className={styles.menu__list}>
           <li className={styles.menu__item}>
@@ -37,7 +44,7 @@ export default function Navigation() {
             </Link>
           </li>
         </ul>
-      </div>
+      </div>)}
     </nav>
   );
 }
