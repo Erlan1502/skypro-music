@@ -13,6 +13,7 @@
 }
 
 .nav__burger {
+  cursor: pointer;
   width: 20px;
   height: 36px;
   padding: 13px 0;
@@ -53,6 +54,7 @@
 .menu__item {
   padding: 5px 0;
   margin-bottom: 16px;
+  list-style: none;
 }
 
 .menu__link {
