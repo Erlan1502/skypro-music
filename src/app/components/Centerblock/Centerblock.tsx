@@ -8,7 +8,6 @@ export default function Centerblock() {
   return (
     <div className={styles.centerblock}>
       <Search />
-      <Search />
       <h2 className={styles.centerblock__h2}>Треки</h2>
       <Filter tracks={trackListData} />
       <div className={styles.centerblock__content}>
@@ -28,7 +27,6 @@ export default function Centerblock() {
             </svg>
           </div>
         </div>
-        <TrackList tracks={trackListData} />
         <TrackList tracks={trackListData} />
       </div>
     </div>
