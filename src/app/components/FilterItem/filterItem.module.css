@@ -15,3 +15,11 @@
 .btn {
   cursor: pointer;
 }
+.active {
+  color: rgb(182, 114, 255);
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0%;
+  text-align: left;
+  border-color: rgb(182, 114, 255);
+}

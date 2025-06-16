@@ -1,7 +1,7 @@
 import styles from './centerblock.module.css';
 import classnames from 'classnames';
 import TrackList from '../TrackList/TrackList';
-import { trackListData} from '../TrackListData/TrackListData';
+import { trackListData } from '../TrackListData/TrackListData';
 import Search from '../Search/Search';
 import Filter from '../Filter/Filter';
 export default function Centerblock() {
@@ -9,7 +9,7 @@ export default function Centerblock() {
     <div className={styles.centerblock}>
       <Search />
       <h2 className={styles.centerblock__h2}>Треки</h2>
-      <Filter/>
+      <Filter tracks={trackListData} />
       <div className={styles.centerblock__content}>
         <div className={styles.content__title}>
           <div className={classnames(styles.playlistTitle__col, styles.col01)}>
