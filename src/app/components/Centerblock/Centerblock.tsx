@@ -1,9 +1,13 @@
 import styles from './centerblock.module.css';
 import classnames from 'classnames';
 import TrackList from '../TrackList/TrackList';
+<<<<<<< hw-2
 import { trackListData } from '../TrackListData/TrackListData';
 import Search from '../Search/Search';
 import Filter from '../Filter/Filter';
+=======
+import { trackListData} from '../TrackListData/TrackListData';
+>>>>>>> main
 export default function Centerblock() {
   return (
     <div className={styles.centerblock}>
