@@ -1,3 +1,6 @@
+'use client';
+import { setCurrentTrack } from '../../../store/features/trackSlice';
+import { useAppDispatch } from '../../../store/store';
 import styles from './track.module.css';
 import Link from 'next/link';
 
@@ -16,10 +19,24 @@ export default function Track({
   author,
   album,
   duration,
-  liked = false
+  liked = false,
 }: TrackProps) {
+  const dispatch = useAppDispatch();
+
+  const onClickTrack = () => {
+    dispatch(
+      setCurrentTrack({
+        title,
+        titleSpan,
+        author,
+        album,
+        duration,
+        liked: false,
+      }),
+    );
+  };
   return (
-    <div className={styles.playlist__track}>
+    <div className={styles.playlist__track} onClick={onClickTrack}>
       <div className={styles.track__title}>
         <div className={styles.track__titleImage}>
           <svg className={styles.track__titleSvg}>
@@ -29,7 +46,9 @@ export default function Track({
         <div className={styles.track__titleText}>
           <Link className={styles.track__titleLink} href="">
             {title}
-            {titleSpan && <span className={styles.track__titleSpan}>{titleSpan}</span>}
+            {titleSpan && (
+              <span className={styles.track__titleSpan}>{titleSpan}</span>
+            )}
           </Link>
         </div>
       </div>
@@ -44,7 +63,9 @@ export default function Track({
         </Link>
       </div>
       <div className={styles.track__time}>
-        <svg className={`${styles.track__timeSvg} ${styles.btnIcon} ${liked ? styles.liked : ''}`}>
+        <svg
+          className={`${styles.track__timeSvg} ${styles.btnIcon} ${liked ? styles.liked : ''}`}
+        >
           <use xlinkHref="/img/icon/sprite.svg#icon-like"></use>
         </svg>
         <span className={styles.track__timeText}>{duration}</span>
