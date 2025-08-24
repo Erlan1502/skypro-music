@@ -1,10 +1,52 @@
+'use client';
 import styles from './bar.module.css';
 import classnames from 'classnames';
-import Link from 'next/link';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { useEffect, useRef } from 'react';
+import { setIsPlay } from '../../../store/features/trackSlice';
 
 export default function Bar() {
+  const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
+  const isPlaying = useAppSelector((state) => state.tracks.isPlay);
+  const dispatch = useAppDispatch();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Пауза
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current
+          .play()
+          .catch((error) => console.error('Ошибка воспроизведения:', error));
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
+
+  // СМЕНА ТРЕКА
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current
+          .play()
+          .catch((error) => console.error('Ошибка воспроизведения:', error));
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
+
+  const handlePlayPause = () => {
+    if (!currentTrack) return;
+    dispatch(setIsPlay(!isPlaying));
+  };
+
+  if (!currentTrack) return null;
+
   return (
     <div className={styles.bar}>
+      <audio ref={audioRef} style={{ display: 'none' }} />
       <div className={styles.bar__content}>
         <div className={styles.bar__playerProgress}></div>
         <div className={styles.bar__playerBlock}>
@@ -12,24 +54,29 @@ export default function Bar() {
             <div className={styles.player__controls}>
               <div className={styles.player__btnPrev}>
                 <svg className={styles.player__btnPrevSvg}>
-                  <use xlinkHref="/img/icon/sprite.svg#icon-prev"></use>
+                  <use href="/img/icon/sprite.svg#icon-prev"></use>
                 </svg>
               </div>
-              <div className={classnames(styles.player__btnPlay, styles.btn)}>
+              <div
+                className={classnames(styles.player__btnPlay, styles.btn)}
+                onClick={handlePlayPause}
+              >
                 <svg className={styles.player__btnPlaySvg}>
-                  <use xlinkHref="/img/icon/sprite.svg#icon-play"></use>
+                  <use
+                    href={`/img/icon/sprite.svg#icon-${isPlaying ? 'pause' : 'play'}`}
+                  ></use>
                 </svg>
               </div>
               <div className={styles.player__btnNext}>
                 <svg className={styles.player__btnNextSvg}>
-                  <use xlinkHref="/img/icon/sprite.svg#icon-next"></use>
+                  <use href="/img/icon/sprite.svg#icon-next"></use>
                 </svg>
               </div>
               <div
                 className={classnames(styles.player__btnRepeat, styles.btnIcon)}
               >
                 <svg className={styles.player__btnRepeatSvg}>
-                  <use xlinkHref="/img/icon/sprite.svg#icon-repeat"></use>
+                  <use href="/img/icon/sprite.svg#icon-repeat"></use>
                 </svg>
               </div>
               <div
@@ -39,7 +86,7 @@ export default function Bar() {
                 )}
               >
                 <svg className={styles.player__btnShuffleSvg}>
-                  <use xlinkHref="/img/icon/sprite.svg#icon-shuffle"></use>
+                  <use href="/img/icon/sprite.svg#icon-shuffle"></use>
                 </svg>
               </div>
             </div>
@@ -48,21 +95,20 @@ export default function Bar() {
               <div className={styles.trackPlay__contain}>
                 <div className={styles.trackPlay__image}>
                   <svg className={styles.trackPlay__svg}>
-                    <use xlinkHref="/img/icon/sprite.svg#icon-note"></use>
+                    <use href="/img/icon/sprite.svg#icon-note"></use>
                   </svg>
                 </div>
                 <div className={styles.trackPlay__author}>
-                  <Link className={styles.trackPlay__authorLink} href="">
-                    Ты та...
-                  </Link>
+                  <span className={styles.trackPlay__authorLink}>
+                    {currentTrack.title}
+                  </span>
                 </div>
                 <div className={styles.trackPlay__album}>
-                  <Link className={styles.trackPlay__albumLink} href="">
-                    Баста
-                  </Link>
+                  <span className={styles.trackPlay__albumLink}>
+                    {currentTrack.author}
+                  </span>
                 </div>
               </div>
-
               <div className={styles.trackPlay__dislike}>
                 <div
                   className={classnames(

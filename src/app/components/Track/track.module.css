@@ -115,3 +115,23 @@
   text-align: right;
   color: #696969;
 }
+.playingDot {
+  width: 16px;
+  height: 16px;
+  background-color: #b672ff;
+  border-radius: 50%;
+}
+.pulsingDot {
+  animation: pulse 1.5s infinite ease-in-out;
+}
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
