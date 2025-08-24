@@ -11,10 +11,31 @@ export default function Bar() {
   const dispatch = useAppDispatch();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Этот useEffect отвечает за управление воспроизведением (Play/Pause)
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !currentTrack) return;
+    audio.src = currentTrack.track_file;
+    audio.load();
+    // Ожидание пргрузки для исключения data race
+    const handleCanPlay = () => {
+      if (isPlaying) {
+        audio.play().catch((error) => console.error('Ошибка воспроизведения:', error));
+      }
+    };
+    
+    audio.addEventListener('canplay', handleCanPlay);
+    return () => {
+      audio.removeEventListener('canplay', handleCanPlay);
+    };
+  }, [currentTrack]);
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
+
+    // ИСКЛЮЧАЕМ ГОНКУ ДАННЫХ
+    if (audio.readyState < 2) { 
+      return;
+    }
 
     if (isPlaying) {
       audio.play().catch((error) => console.error('Ошибка воспроизведения:', error));
@@ -23,29 +44,11 @@ export default function Bar() {
     }
   }, [isPlaying]);
 
-  // Этот useEffect отвечает за смену трека
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio || !currentTrack) return;
-
-    // Устанавливаем новый источник звука
-    audio.src = currentTrack.track_file;
-    audio.currentTime = 0; // Сбрасываем плеер на начало
-
-    // Запускаем воспроизведение, если isPlaying === true
-    if (isPlaying) {
-      audio.play().catch((error) => console.error('Ошибка воспроизведения:', error));
-    }
-  }, [currentTrack]);
-
-
-  // Обработчик для кнопки Play/Pause
   const handlePlayPause = () => {
     if (!currentTrack) return;
     dispatch(setIsPlay(!isPlaying));
   };
 
-  // Обработчики для нереализованных кнопок согласно ТЗ
   const handleNotImplemented = () => {
     alert('Еще не реализовано');
   };
@@ -54,7 +57,6 @@ export default function Bar() {
 
   return (
     <div className={styles.bar}>
-      {/* Скрытый аудио элемент, которым мы управляем */}
       <audio ref={audioRef} style={{ display: 'none' }} />
       <div className={styles.bar__content}>
         <div className={styles.bar__playerProgress}></div>

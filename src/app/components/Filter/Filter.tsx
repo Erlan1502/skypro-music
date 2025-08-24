@@ -3,18 +3,12 @@ import { useState } from 'react';
 import styles from './filter.module.css';
 import FilterItem from '../FilterItem/FilterItem';
 import classNames from 'classnames';
-
-interface TrackListItem {
-  id: string;
-  author: string;
-  release_date?: string;
-  genre?: string;
-}
+import { Track } from '../../../services/api';
 
 type FilterKey = 'author' | 'release_date' | 'genre';
 
 interface FilterProps {
-  tracks: TrackListItem[];
+  tracks: Track[];
 }
 
 export default function Filter({ tracks }: FilterProps) {
