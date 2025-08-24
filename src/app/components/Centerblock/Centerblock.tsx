@@ -6,21 +6,30 @@ import classnames from 'classnames';
 import TrackList from '../TrackList/TrackList';
 import Search from '../Search/Search';
 import Filter from '../Filter/Filter';
-import { getAllTracks, Track } from '../../../services/api';
+import { getAllTracks, Track, ApiResponse } from '../../../services/api';
 
 export default function Centerblock() {
+
   const [tracks, setTracks] = useState<Track[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // ПРОВЕРКА
+    console.log('useEffect РАБОТАЕТ');
+    
     const fetchTracks = async () => {
       try {
-        const data = await getAllTracks();
-        setTracks(data.results);
+        const data: ApiResponse = await getAllTracks();
+        console.log('Данные получены:', data); // ПРОВЕРКА
+        setTracks(data.data);
       } catch (err) {
+        console.error('Ошибка при загрузке треков:', err); // ПРОВЕРКА
         setError(
           err instanceof Error ? err.message : 'Не удалось загрузить треки',
         );
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -49,7 +58,13 @@ export default function Centerblock() {
             </svg>
           </div>
         </div>
-        {error ? <p>Ошибка: {error}</p> : <TrackList tracks={tracks} />}
+        {isLoading ? (
+          <p>Загрузка треков...</p>
+        ) : error ? (
+          <p>Ошибка: {error}</p>
+        ) : (
+          <TrackList tracks={tracks} />
+        )}
       </div>
     </div>
   );

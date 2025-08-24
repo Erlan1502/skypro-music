@@ -11,48 +11,57 @@ export default function Bar() {
   const dispatch = useAppDispatch();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Пауза
+  // Этот useEffect отвечает за управление воспроизведением (Play/Pause)
   useEffect(() => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current
-          .play()
-          .catch((error) => console.error('Ошибка воспроизведения:', error));
-      } else {
-        audioRef.current.pause();
-      }
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isPlaying) {
+      audio.play().catch((error) => console.error('Ошибка воспроизведения:', error));
+    } else {
+      audio.pause();
     }
   }, [isPlaying]);
 
-  // СМЕНА ТРЕКА
+  // Этот useEffect отвечает за смену трека
   useEffect(() => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current
-          .play()
-          .catch((error) => console.error('Ошибка воспроизведения:', error));
-      } else {
-        audioRef.current.pause();
-      }
-    }
-  }, [isPlaying]);
+    const audio = audioRef.current;
+    if (!audio || !currentTrack) return;
 
+    // Устанавливаем новый источник звука
+    audio.src = currentTrack.track_file;
+    audio.currentTime = 0; // Сбрасываем плеер на начало
+
+    // Запускаем воспроизведение, если isPlaying === true
+    if (isPlaying) {
+      audio.play().catch((error) => console.error('Ошибка воспроизведения:', error));
+    }
+  }, [currentTrack]);
+
+
+  // Обработчик для кнопки Play/Pause
   const handlePlayPause = () => {
     if (!currentTrack) return;
     dispatch(setIsPlay(!isPlaying));
+  };
+
+  // Обработчики для нереализованных кнопок согласно ТЗ
+  const handleNotImplemented = () => {
+    alert('Еще не реализовано');
   };
 
   if (!currentTrack) return null;
 
   return (
     <div className={styles.bar}>
+      {/* Скрытый аудио элемент, которым мы управляем */}
       <audio ref={audioRef} style={{ display: 'none' }} />
       <div className={styles.bar__content}>
         <div className={styles.bar__playerProgress}></div>
         <div className={styles.bar__playerBlock}>
           <div className={styles.bar__player}>
             <div className={styles.player__controls}>
-              <div className={styles.player__btnPrev}>
+              <div className={styles.player__btnPrev} onClick={handleNotImplemented}>
                 <svg className={styles.player__btnPrevSvg}>
                   <use href="/img/icon/sprite.svg#icon-prev"></use>
                 </svg>
@@ -67,13 +76,14 @@ export default function Bar() {
                   ></use>
                 </svg>
               </div>
-              <div className={styles.player__btnNext}>
+              <div className={styles.player__btnNext} onClick={handleNotImplemented}>
                 <svg className={styles.player__btnNextSvg}>
                   <use href="/img/icon/sprite.svg#icon-next"></use>
                 </svg>
               </div>
               <div
                 className={classnames(styles.player__btnRepeat, styles.btnIcon)}
+                onClick={handleNotImplemented}
               >
                 <svg className={styles.player__btnRepeatSvg}>
                   <use href="/img/icon/sprite.svg#icon-repeat"></use>
@@ -84,6 +94,7 @@ export default function Bar() {
                   styles.player__btnShuffle,
                   styles.btnIcon,
                 )}
+                onClick={handleNotImplemented}
               >
                 <svg className={styles.player__btnShuffleSvg}>
                   <use href="/img/icon/sprite.svg#icon-shuffle"></use>
@@ -100,7 +111,7 @@ export default function Bar() {
                 </div>
                 <div className={styles.trackPlay__author}>
                   <span className={styles.trackPlay__authorLink}>
-                    {currentTrack.title}
+                    {currentTrack.name}
                   </span>
                 </div>
                 <div className={styles.trackPlay__album}>

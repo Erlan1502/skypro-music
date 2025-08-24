@@ -40,10 +40,7 @@ export default function Track(track: TrackProps) {
           )}
         </div>
         <div className={styles.track__titleText}>
-          {track.title}
-          {track.titleSpan && (
-            <span className={styles.track__titleSpan}>{track.titleSpan}</span>
-          )}
+          {track.name}
         </div>
       </div>
       <div className={styles.track__author}>{track.author}</div>
