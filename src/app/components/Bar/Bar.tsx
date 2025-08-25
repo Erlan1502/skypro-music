@@ -19,26 +19,30 @@ export default function Bar() {
     // Ожидание пргрузки для исключения data race
     const handleCanPlay = () => {
       if (isPlaying) {
-        audio.play().catch((error) => console.error('Ошибка воспроизведения:', error));
+        audio
+          .play()
+          .catch((error) => console.error('Ошибка воспроизведения:', error));
       }
     };
-    
+
     audio.addEventListener('canplay', handleCanPlay);
     return () => {
       audio.removeEventListener('canplay', handleCanPlay);
     };
-  }, [currentTrack]);
+  }, [currentTrack, isPlaying]);
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     // ИСКЛЮЧАЕМ ГОНКУ ДАННЫХ
-    if (audio.readyState < 2) { 
+    if (audio.readyState < 2) {
       return;
     }
 
     if (isPlaying) {
-      audio.play().catch((error) => console.error('Ошибка воспроизведения:', error));
+      audio
+        .play()
+        .catch((error) => console.error('Ошибка воспроизведения:', error));
     } else {
       audio.pause();
     }
@@ -63,7 +67,10 @@ export default function Bar() {
         <div className={styles.bar__playerBlock}>
           <div className={styles.bar__player}>
             <div className={styles.player__controls}>
-              <div className={styles.player__btnPrev} onClick={handleNotImplemented}>
+              <div
+                className={styles.player__btnPrev}
+                onClick={handleNotImplemented}
+              >
                 <svg className={styles.player__btnPrevSvg}>
                   <use href="/img/icon/sprite.svg#icon-prev"></use>
                 </svg>
@@ -78,7 +85,10 @@ export default function Bar() {
                   ></use>
                 </svg>
               </div>
-              <div className={styles.player__btnNext} onClick={handleNotImplemented}>
+              <div
+                className={styles.player__btnNext}
+                onClick={handleNotImplemented}
+              >
                 <svg className={styles.player__btnNextSvg}>
                   <use href="/img/icon/sprite.svg#icon-next"></use>
                 </svg>

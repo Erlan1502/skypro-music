@@ -1,7 +1,7 @@
 const API_BASE_URL = 'https://webdev-music-003b5b991590.herokuapp.com';
 
 export interface Track {
-  id: number;
+  _id: number; // исходя из респонса
   name: string;
   author: string;
   release_date: string;
@@ -15,10 +15,8 @@ export interface Track {
 }
 
 export interface ApiResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: Track[];
+  success: boolean;
+  data: Track[];
 }
 
 export const getAllTracks = async (): Promise<ApiResponse> => {

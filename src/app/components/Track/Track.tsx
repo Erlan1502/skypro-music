@@ -16,7 +16,7 @@ export default function Track(track: TrackProps) {
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
   const isPlaying = useAppSelector((state) => state.tracks.isPlay);
 
-  const isCurrentTrack = currentTrack?.id === track.id;
+  const isCurrentTrack = currentTrack?._id === track._id;
 
   const handleClick = () => {
     dispatch(setCurrentTrack(track));
@@ -39,9 +39,7 @@ export default function Track(track: TrackProps) {
             </svg>
           )}
         </div>
-        <div className={styles.track__titleText}>
-          {track.name}
-        </div>
+        <div className={styles.track__titleText}>{track.name}</div>
       </div>
       <div className={styles.track__author}>{track.author}</div>
       <div className={styles.track__album}>{track.album}</div>

@@ -17,7 +17,8 @@ export default function Centerblock() {
     const fetchTracks = async () => {
       try {
         const data: ApiResponse = await getAllTracks();
-        setTracks(data.results);
+        setTracks(data.data);
+        console.log('Данные: ', data); // Проверка undefined ушел после изменения типизации ApiResponse.
       } catch (err) {
         setError(
           err instanceof Error ? err.message : 'Не удалось загрузить треки',
