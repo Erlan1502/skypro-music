@@ -1,5 +1,5 @@
 'use client';
-import { setCurrentTrack, setIsPlay } from '../../../store/features/trackSlice';
+import { setCurrentTrack, setCurrentPlaylist, setIsPlay } from '../../../store/features/trackSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import styles from './track.module.css';
 import { Track as TrackProps } from '../../../services/api';
@@ -11,7 +11,7 @@ const formatDuration = (seconds: number) => {
   return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
 };
 
-export default function Track(track: TrackProps) {
+export default function Track({ track, tracks }: { track: TrackProps, tracks: TrackProps[] }) {
   const dispatch = useAppDispatch();
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
   const isPlaying = useAppSelector((state) => state.tracks.isPlay);
@@ -20,6 +20,7 @@ export default function Track(track: TrackProps) {
 
   const handleClick = () => {
     dispatch(setCurrentTrack(track));
+    dispatch(setCurrentPlaylist(tracks));
     dispatch(setIsPlay(true));
   };
 

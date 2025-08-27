@@ -22,7 +22,7 @@ export default function TrackList({ tracks }: TrackListProps) {
     <div className={styles.content__playlist}>
       {tracks.map((track) => (
         <div key={track._id} className={styles.playlist__item}>
-          <Track {...track} />
+          <Track track={track} tracks={tracks} />
         </div>
       ))}
     </div>
