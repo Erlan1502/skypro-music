@@ -29,7 +29,7 @@ export default function Bar() {
     return () => {
       audio.removeEventListener('canplay', handleCanPlay);
     };
-  }, [currentTrack, isPlaying]);
+  }, [currentTrack]);
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
