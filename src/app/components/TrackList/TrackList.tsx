@@ -1,27 +1,28 @@
-import styles from './TrackList.module.css';
-import Track, { TrackProps } from '../Track/Track';
+'use client';
 
-interface TrackListItem extends TrackProps {
-  id: string;
-}
+import styles from './TrackList.module.css';
+import Track from '../Track/Track';
+import { Track as TrackType } from '../../../services/api';
 
 interface TrackListProps {
-  tracks: TrackListItem[];
+  tracks: TrackType[];
 }
 
 export default function TrackList({ tracks }: TrackListProps) {
+  //Логика обработки отсутствия массива треков.
+  if (!tracks) {
+    return <div className={styles.content__playlist}>Загрузка треков...</div>;
+  }
+
+  if (tracks.length === 0) {
+    return <div className={styles.content__playlist}>Треки не найдены.</div>;
+  }
+
   return (
     <div className={styles.content__playlist}>
       {tracks.map((track) => (
-        <div key={track.id} className={styles.playlist__item}>
-          <Track 
-            title={track.title}
-            titleSpan={track.titleSpan}
-            author={track.author}
-            album={track.album}
-            duration={track.duration}
-            liked={track.liked}
-          />
+        <div key={track._id} className={styles.playlist__item}>
+          <Track track={track} tracks={tracks} />
         </div>
       ))}
     </div>

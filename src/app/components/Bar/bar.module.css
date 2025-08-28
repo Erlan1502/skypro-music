@@ -21,6 +21,13 @@
   width: 100%;
   height: 5px;
   background: #2e2e2e;
+  cursor: pointer;
+}
+
+.bar__playerProgress_time {
+  color: #696969;
+  text-align: end;
+  padding-right: 20px;
 }
 
 .bar__playerBlock {
@@ -131,12 +138,24 @@
   fill: transparent;
   stroke: #696969;
 }
+.player__btnRepeatSvg_active {
+    width: 18px;
+    height: 12px;
+    fill: transparent;
+    stroke: #ffffff;
+}
 
 .player__btnShuffleSvg {
   width: 19px;
   height: 12px;
   fill: transparent;
   stroke: #696969;
+}
+.player__btnShuffleSvg_active {
+    width: 19px;
+    height: 12px;
+    fill: transparent;
+    stroke: #ffffff;
 }
 
 /* Стили для текущего трека */
@@ -262,7 +281,7 @@
   align-items: center;
   -webkit-box-pack: end;
   -ms-flex-pack: end;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .volume__image {
