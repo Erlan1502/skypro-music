@@ -1,41 +1,37 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import styles from './page.module.css';
-import Navigation from '@/components/Navigation/Navigation';
-import Bar from '@/components/Bar/Bar';
-import Sidebar from '@/components/Slidebar/Sidebar';
 import Centerblock from '@/components/Centerblock/Centerblock';
+import { getAllTracks, Track } from '../../../services/track/apiTrack';
 
 export default function MainPage() {
-  const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [tracks, setTracks] = useState<Track[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-      router.push('/auth/SignIn');
-    } else {
-      setIsAuthenticated(true);
-    }
-  }, [router]);
+    const fetchAllTracks = async () => {
+      try {
+        const response = await getAllTracks();
+        setTracks(response.data);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : 'Не удалось загрузить треки',
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  if (!isAuthenticated) {
-    return null;
-  }
+    fetchAllTracks();
+  }, []);
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.container}>
-        <main className={styles.main}>
-          <Navigation />
-          <Centerblock />
-          <Sidebar />
-        </main>
-        <Bar />
-        <footer className="footer"></footer>
-      </div>
-    </div>
+    <Centerblock
+      title="Треки"
+      tracks={tracks}
+      isLoading={isLoading}
+      error={error}
+    />
   );
 }

@@ -40,7 +40,7 @@ export default function SignUp() {
     setIsLoading(true);
     try {
       await signUpUser({ username, email, password });
-      router.push('/auth/signin');
+      router.push('/auth/SignIn');
     } catch (error: unknown) {
       const axiosError = error as AxiosError<{
         message?: string;
