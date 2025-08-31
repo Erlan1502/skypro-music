@@ -5,11 +5,46 @@ interface authUserProps {
   email: string;
   password: string;
 }
+interface authUserReturn {
+  email: string;
+  username: string;
+  _id: number;
+}
+interface SignUpUsers extends authUserProps {
+  username: string;
+}
 
-export const authUser = (data: authUserProps) => {
-  return axios.post(API_BASE_URL + '/user/login', data, {
-    headers: {
-      'content-type': 'application/json',
-    },
-  });
+interface TokenResponse {
+  access: string;
+  refresh: string;
+}
+
+export const signUpUser = (data: SignUpUsers): Promise<authUserReturn> => {
+  return axios
+    .post(`${API_BASE_URL}/user/signup/`, data, {
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+    .then((response) => {
+      return response.data.result;
+    });
+};
+export const authUser = (data: authUserProps): Promise<authUserReturn> => {
+  return axios
+    .post(API_BASE_URL + '/user/login', data, {
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+    .then((response) => response.data);
+};
+export const getTokens = (data: authUserProps): Promise<TokenResponse> => {
+  return axios
+    .post(`${API_BASE_URL}/user/token/`, data, {
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+    .then((response) => response.data);
 };
