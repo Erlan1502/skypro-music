@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import styles from './layout.module.css';
 import { ReactNode } from 'react';
 
 interface AuthLayoutProps {
@@ -7,14 +7,13 @@ interface AuthLayoutProps {
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <>
-      <h1 style={{ color: 'black' }}>Layout</h1>
-      <Link style={{ color: 'black' }} href="auth/SignIn">
-        Auth
-      </Link>
-      <Link style={{ color: 'black' }} href="auth/SignUp">
-        Reg
-      </Link>
-      {children}
+      <div className={styles.wrapper}>
+        <div className={styles.containerEnter}>
+          <div className={styles.modal__block}>
+            <form className={styles.modal__form}>{children}</form>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

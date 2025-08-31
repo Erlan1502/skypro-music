@@ -6,7 +6,11 @@ import classnames from 'classnames';
 import TrackList from '../TrackList/TrackList';
 import Search from '../Search/Search';
 import Filter from '../Filter/Filter';
-import { getAllTracks, Track, ApiResponse } from '../../../services/api';
+import {
+  getAllTracks,
+  Track,
+  ApiResponse,
+} from '../../../services/track/apiTrack';
 
 export default function Centerblock() {
   const [tracks, setTracks] = useState<Track[]>([]);

@@ -1,8 +1,8 @@
 import styles from './page.module.css';
 import Navigation from '@/components/Navigation/Navigation';
 import Bar from '@/components/Bar/Bar';
-import Sidebar from './components/Slidebar/Sidebar';
-import Centerblock from './components/Centerblock/Centerblock';
+import Sidebar from '@/components/Slidebar/Sidebar';
+import Centerblock from '@/components/Centerblock/Centerblock';
 export default function Home() {
   return (
     <div className={styles.wrapper}>

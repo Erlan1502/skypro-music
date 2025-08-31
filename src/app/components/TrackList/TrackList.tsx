@@ -2,7 +2,7 @@
 
 import styles from './TrackList.module.css';
 import Track from '../Track/Track';
-import { Track as TrackType } from '../../../services/api';
+import { Track as TrackType } from '../../../services/track/apiTrack';
 
 interface TrackListProps {
   tracks: TrackType[];
