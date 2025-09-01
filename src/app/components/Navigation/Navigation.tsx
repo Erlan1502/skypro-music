@@ -3,11 +3,19 @@ import styles from './navigation.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 export default function Navigation() {
   const [isOnBurger, setConditionBurger] = useState<boolean>(false);
   const handleClick = () => {
     setConditionBurger(!isOnBurger);
+  };
+  const router = useRouter();
+  const handleLogout = () => {
+  localStorage.removeItem('username');
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+  router.push('/auth/SignIn');
   };
   return (
     <nav className={styles.main__nav}>
@@ -38,12 +46,12 @@ export default function Navigation() {
                 Мой плейлист
               </Link>
             </li>
-            {/* <li className={styles.menu__item}>
-              <Link href="/auth/SignIn.html" className={styles.menu__link}>
-                Войти
+            <li className={styles.menu__item}>
+              <Link href="/auth/SignIn.html" onClick={handleLogout} className={styles.menu__link}>
+                Выйти
               </Link>
-            </li> т.к. мы даем дальнейший доступ ТОЛЬКО АВТОРИЗИРОВАННЫМ 
-            пользователям, то и смысла в этом разделе нет*/}
+            </li> 
+            {/* Вернули и изменили на "Выйти" */}
           </ul>
         </div>
       )}
