@@ -61,13 +61,23 @@ export const getSelectionTracks = async (id: string): Promise<Selection> => {
 };
 
 export const addLike = async (id: string) => {
-  const response = await fetch(`${API_BASE_URL}/catalog/track/${id}/favorite/`);
+  const response = await fetch(
+    `${API_BASE_URL}/catalog/track/${id}/favorite/`,
+    {
+      method: 'POST',
+    },
+  );
   if (!response.ok) {
     throw new Error(`Ошибка HTTP: ${response.status}`);
   }
 };
 export const removeLike = async (id: string) => {
-  const response = await fetch(`${API_BASE_URL}/catalog/track/${id}/favorite/`);
+  const response = await fetch(
+    `${API_BASE_URL}/catalog/track/${id}/favorite/`,
+    {
+      method: 'DELETE',
+    },
+  );
   if (!response.ok) {
     throw new Error(`Ошибка HTTP: ${response.status}`);
   }

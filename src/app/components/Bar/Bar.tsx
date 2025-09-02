@@ -9,6 +9,7 @@ import {
   playPrevTrack,
   toggleShuffle,
 } from '../../../store/features/trackSlice';
+import { useLikeTrack } from '@/hooks/useLikeTracks';
 
 const formatTime = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
@@ -22,7 +23,7 @@ export default function Bar() {
   const isShuffle = useAppSelector((state) => state.tracks.isShuffle);
   const dispatch = useAppDispatch();
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
+  const { toggleLike, isLike, isLoading } = useLikeTrack(currentTrack);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.5);
@@ -104,6 +105,12 @@ export default function Bar() {
     if (audioRef.current) {
       audioRef.current.currentTime = Number(event.target.value);
     }
+  };
+
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isLoading) return;
+    toggleLike();
   };
 
   if (!currentTrack) return null;
@@ -215,13 +222,16 @@ export default function Bar() {
                   </svg>
                 </div>
                 <div
+                  onClick={handleLikeClick}
                   className={classnames(
                     styles.trackPlay__dislike,
                     styles.btnIcon,
                   )}
                 >
                   <svg className={styles.trackPlay__dislikeSvg}>
-                    <use xlinkHref="/img/icon/sprite.svg#icon-dislike"></use>
+                    <use
+                      xlinkHref={`/img/icon/sprite.svg#${isLike ? 'icon-like' : 'icon-dislike'}`}
+                    ></use>
                   </svg>
                 </div>
               </div>

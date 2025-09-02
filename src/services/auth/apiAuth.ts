@@ -19,6 +19,10 @@ interface TokenResponse {
   refresh: string;
 }
 
+type accessTokenType = Pick<TokenResponse, 'access'>;
+
+type refreshTokenType = Pick<TokenResponse, 'refresh'>;
+
 export const signUpUser = (data: SignUpUsers): Promise<authUserReturn> => {
   return axios
     .post(`${API_BASE_URL}/user/signup/`, data, {
@@ -42,6 +46,17 @@ export const authUser = (data: authUserProps): Promise<authUserReturn> => {
 export const getTokens = (data: authUserProps): Promise<TokenResponse> => {
   return axios
     .post(`${API_BASE_URL}/user/token/`, data, {
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+    .then((response) => response.data);
+};
+export const refreshTokens = (
+  data: authUserProps,
+): Promise<accessTokenType> => {
+  return axios
+    .post(`${API_BASE_URL}/user/token/refresh`, data, {
       headers: {
         'content-type': 'application/json',
       },

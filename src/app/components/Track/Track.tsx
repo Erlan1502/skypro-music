@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../store/store';
 import styles from './track.module.css';
 import { Track as TrackProps } from '../../../services/track/apiTrack';
 import classNames from 'classnames';
+import { useLikeTrack } from '@/hooks/useLikeTracks';
 
 const formatDuration = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
@@ -25,7 +26,7 @@ export default function Track({
   const dispatch = useAppDispatch();
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
   const isPlaying = useAppSelector((state) => state.tracks.isPlay);
-
+  const { toggleLike, isLike } = useLikeTrack(track);
   const isCurrentTrack = currentTrack?._id === track._id;
 
   const handleClick = () => {
@@ -54,11 +55,13 @@ export default function Track({
       </div>
       <div className={styles.track__author}>{track.author}</div>
       <div className={styles.track__album}>{track.album}</div>
-      <div className={styles.track__time}>
+      <div className={styles.track__time} onClick={toggleLike}>
         <svg
           className={`${styles.track__timeSvg} ${styles.btnIcon} ${track.liked ? styles.liked : ''}`}
         >
-          <use xlinkHref="/img/icon/sprite.svg#icon-like"></use>
+          <use
+            xlinkHref={`/img/icon/sprite.svg#${isLike ? 'icon-like' : 'icon-dislike'}`}
+          ></use>
         </svg>
         <span className={styles.track__timeText}>
           {formatDuration(track.duration_in_seconds)}
