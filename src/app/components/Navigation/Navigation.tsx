@@ -3,7 +3,7 @@ import styles from './navigation.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export default function Navigation() {
   const [isOnBurger, setConditionBurger] = useState<boolean>(false);
@@ -47,7 +47,7 @@ export default function Navigation() {
               </Link>
             </li>
             <li className={styles.menu__item}>
-              <Link href="/auth/SignIn.html" onClick={handleLogout} className={styles.menu__link}>
+              <Link href="/auth/SignIn" onClick={handleLogout} className={styles.menu__link}>
                 Выйти
               </Link>
             </li> 

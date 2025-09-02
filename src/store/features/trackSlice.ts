@@ -7,6 +7,7 @@ type initialStateType = {
   playlist: TrackProps[];
   shuffledPlaylist: TrackProps[];
   isShuffle: boolean;
+  favoritePlaylist: TrackProps[];
 };
 
 const initialState: initialStateType = {
@@ -14,6 +15,7 @@ const initialState: initialStateType = {
   isPlay: false,
   playlist: [],
   shuffledPlaylist: [],
+  favoritePlaylist: [],
   isShuffle: false,
 };
 
@@ -29,6 +31,9 @@ const trackSlice = createSlice({
     },
     setCurrentPlaylist: (state, action: PayloadAction<TrackProps[]>) => {
       state.playlist = action.payload;
+    },
+    setFavoritePlaylist: (state, action: PayloadAction<TrackProps[]>) => {
+      state.favoritePlaylist = action.payload;
     },
     playNextTrack: (state) => {
       const playlist = state.isShuffle
