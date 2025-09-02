@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 import { authUser, getTokens } from '../../../services/auth/apiAuth';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '../../../store/store';
+import { setUsername } from '../../../store/features/authSlice';
 
 export default function SignIn() {
   const router = useRouter();
@@ -13,6 +15,7 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useAppDispatch();
 
   // ПРОВЕРКА АВТОРИЗАЦИИ
   useEffect(() => {
@@ -37,7 +40,7 @@ export default function SignIn() {
     try {
       const userData = await authUser({ email, password });
       const tokens = await getTokens({ email, password });
-
+      dispatch(setUsername(userData.username));
       localStorage.setItem('username', userData.username);
       localStorage.setItem('accessToken', tokens.access);
       localStorage.setItem('refreshToken', tokens.refresh);
