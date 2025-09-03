@@ -83,6 +83,7 @@ export const {
   setCurrentTrack,
   setCurrentPlaylist,
   setIsPlay,
+  setFavoriteTracks,
   playNextTrack,
   playPrevTrack,
   toggleShuffle,

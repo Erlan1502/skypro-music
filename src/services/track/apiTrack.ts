@@ -1,3 +1,4 @@
+import axios from 'axios';
 const API_BASE_URL = 'https://webdev-music-003b5b991590.herokuapp.com';
 
 export interface Track {
@@ -31,54 +32,59 @@ export interface Selection {
 }
 
 export const getAllTracks = async (): Promise<ApiResponse> => {
-  const response = await fetch(`${API_BASE_URL}/catalog/track/all/`);
-
-  if (!response.ok) {
-    throw new Error(`Ошибка HTTP: ${response.status}`);
-  }
-
-  return response.json();
+  const response = await axios.get(`${API_BASE_URL}/catalog/track/all/`);
+  return response.data;
 };
 
 export const getTrackById = async (id: string): Promise<Track> => {
-  const response = await fetch(`${API_BASE_URL}/catalog/track/${id}/`);
-
-  if (!response.ok) {
-    throw new Error(`Ошибка HTTP: ${response.status}`);
-  }
-
-  return response.json();
+  const response = await axios.get(`${API_BASE_URL}/catalog/track/${id}/`);
+  return response.data;
 };
 
 export const getSelectionTracks = async (id: string): Promise<Selection> => {
-  const response = await fetch(`${API_BASE_URL}/catalog/selection/${id}/`);
-
-  if (!response.ok) {
-    throw new Error(`Ошибка HTTP: ${response.status}`);
-  }
-
-  return response.json();
+  const response = await axios.get(`${API_BASE_URL}/catalog/selection/${id}/`);
+  return response.data;
 };
 
-export const addLike = async (id: string) => {
-  const response = await fetch(
-    `${API_BASE_URL}/catalog/track/${id}/favorite/`,
+export const getFavoriteTracks = async (
+  accessToken: string,
+): Promise<Track[]> => {
+  const response = await axios.get(
+    `${API_BASE_URL}/catalog/track/favorite/all/`,
     {
-      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     },
   );
-  if (!response.ok) {
-    throw new Error(`Ошибка HTTP: ${response.status}`);
+  if (Array.isArray(response.data)) {
+    //Без условного оп на пустом листе падают ошибки
+    return response.data;
   }
+  return [];
 };
-export const removeLike = async (id: string) => {
-  const response = await fetch(
+
+export const addLike = async (id: string, accessToken: string) => {
+  const response = await axios.post(
     `${API_BASE_URL}/catalog/track/${id}/favorite/`,
+    {},
     {
-      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     },
   );
-  if (!response.ok) {
-    throw new Error(`Ошибка HTTP: ${response.status}`);
-  }
+  return response.data;
+};
+
+export const removeLike = async (id: string, accessToken: string) => {
+  const response = await axios.delete(
+    `${API_BASE_URL}/catalog/track/${id}/favorite/`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  );
+  return response.data;
 };

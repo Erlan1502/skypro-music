@@ -12,31 +12,24 @@ const initialState: initialStateType = {
 };
 
 const authSlice = createSlice({
-  name: 'authSlice',
+  name: 'auth',
   initialState,
   reducers: {
-    setUsername: (state, action: PayloadAction<string>) => {
-      state.username = action.payload;
-      localStorage.setItem('username', action.payload);
+    setAuth: (state, action: PayloadAction<initialStateType>) => {
+      state.access = action.payload.access;
+      state.refresh = action.payload.refresh;
+      state.username = action.payload.username;
+    },
+    logout: (state) => {
+      state.access = '';
+      state.refresh = '';
+      state.username = '';
     },
     setAccessToken: (state, action: PayloadAction<string>) => {
       state.access = action.payload;
-      localStorage.setItem('access', action.payload);
     },
-    setRefreshToken: (state, action: PayloadAction<string>) => {
-      state.refresh = action.payload;
-      localStorage.setItem('refresh', action.payload);
-    },
-    clearUser: (state) =>{
-      state.username='';      
-      state.access='';
-      state.refresh='';
-      localStorage.removeItem('username');
-      localStorage.removeItem('access');
-      localStorage.removeItem('refresh');
-    }
   },
 });
 
-export const { setUsername, setAccessToken, setRefreshToken, clearUser } = authSlice.actions;
+export const { setAuth, logout, setAccessToken } = authSlice.actions;
 export const authSliceReducer = authSlice.reducer;

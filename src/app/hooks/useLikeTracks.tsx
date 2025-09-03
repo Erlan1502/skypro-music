@@ -6,6 +6,7 @@ import {
 import { useAppSelector, useAppDispatch } from '../../store/store';
 import { useState } from 'react';
 import { AxiosError } from 'axios';
+import { withReauth } from '../../utils/withReauth';
 
 interface returnTypeHook {
   isLoading: boolean;
@@ -16,6 +17,7 @@ interface returnTypeHook {
 
 export const useLikeTrack = (track: Track | null): returnTypeHook => {
   const { favoriteTracks } = useAppSelector((state) => state.tracks);
+  const { access, refresh } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const isLike = favoriteTracks.some((t) => t._id === track?._id);
@@ -23,7 +25,8 @@ export const useLikeTrack = (track: Track | null): returnTypeHook => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const toggleLike = async () => {
-    if (!track) {
+    if (!track || !access || !refresh) {
+      setErrorMsg('Требуется авторизация для выполнения этого действия.');
       return;
     }
     const actionApi = isLike ? removeLike : addLike;
@@ -33,18 +36,20 @@ export const useLikeTrack = (track: Track | null): returnTypeHook => {
     setErrorMsg(null);
 
     try {
-      await actionApi(track._id.toString());
+      await withReauth(
+        (token) => actionApi(track._id.toString(), token),
+        access,
+        refresh,
+        dispatch,
+      );
       dispatch(actionSlice(track));
     } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response) {
-          setErrorMsg(error.response.data.message || 'Ошибка сервера');
-        } else {
-          setErrorMsg('Произошла ошибка сети. Попробуйте позже');
-        }
-      } else {
-        setErrorMsg('Неизвестная ошибка');
-      }
+      const axiosError = error as AxiosError;
+      setErrorMsg(
+        (axiosError.response?.data as { detail?: string })?.detail ||
+          axiosError.message ||
+          'Произошла ошибка',
+      );
     } finally {
       setIsLoading(false);
     }

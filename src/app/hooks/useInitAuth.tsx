@@ -1,16 +1,16 @@
-import { useEffect } from "react";
-import { useAppDispatch } from "../../store/store"
-import { setAccessToken, setRefreshToken, setUsername } from "../../store/features/authSlice";
+import { useEffect } from 'react';
+import { useAppDispatch } from '../../store/store';
+import { setAuth } from '../../store/features/authSlice';
 
 export const useInitAuth = () => {
-    const dispatch = useAppDispatch();
-    useEffect(()=>{
-        const access = localStorage.getItem('access') || '';
-        const refresh = localStorage.getItem('refresh') || '';
-        const username = localStorage.getItem('username') || '';
-        dispatch(setAccessToken(access));
-        dispatch(setRefreshToken(refresh));
-        dispatch(setUsername(username));
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    const access = localStorage.getItem('accessToken') || '';
+    const refresh = localStorage.getItem('refreshToken') || '';
+    const username = localStorage.getItem('username') || '';
 
-    }, [dispatch]);
-}
+    if (access && refresh && username) {
+      dispatch(setAuth({ access, refresh, username }));
+    }
+  }, [dispatch]);
+};

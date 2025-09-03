@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '../../../store/store';
-import { clearUser } from '../../../store/features/authSlice';
+import { logout } from '../../../store/features/authSlice';
 
 export default function Navigation() {
   const [isOnBurger, setConditionBurger] = useState<boolean>(false);
@@ -15,11 +15,11 @@ export default function Navigation() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const handleLogout = () => {
-  dispatch(clearUser());
-  localStorage.removeItem('username');
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('refreshToken');
-  router.push('/auth/SignIn');
+    dispatch(logout());
+    localStorage.removeItem('username');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    router.push('/auth/SignIn');
   };
   return (
     <nav className={styles.main__nav}>
@@ -46,15 +46,19 @@ export default function Navigation() {
               </Link>
             </li>
             <li className={styles.menu__item}>
-              <Link href="#" className={styles.menu__link}>
+              <Link href="/music/favorites" className={styles.menu__link}>
                 Мой плейлист
               </Link>
             </li>
             <li className={styles.menu__item}>
-              <Link href="/auth/SignIn" onClick={handleLogout} className={styles.menu__link}>
+              <Link
+                href="/auth/SignIn"
+                onClick={handleLogout}
+                className={styles.menu__link}
+              >
                 Выйти
               </Link>
-            </li> 
+            </li>
             {/* Вернули и изменили на "Выйти" */}
           </ul>
         </div>

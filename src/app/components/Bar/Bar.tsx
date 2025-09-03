@@ -212,16 +212,6 @@ export default function Bar() {
               </div>
               <div className={styles.trackPlay__dislike}>
                 <div
-                  className={classnames(
-                    styles.player__btnShuffle,
-                    styles.btnIcon,
-                  )}
-                >
-                  <svg className={styles.trackPlay__likeSvg}>
-                    <use xlinkHref="/img/icon/sprite.svg#icon-like"></use>
-                  </svg>
-                </div>
-                <div
                   onClick={handleLikeClick}
                   className={classnames(
                     styles.trackPlay__dislike,
