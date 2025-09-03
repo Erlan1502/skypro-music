@@ -57,11 +57,8 @@ export const getFavoriteTracks = async (
       },
     },
   );
-  if (Array.isArray(response.data)) {
-    //Без условного оп на пустом листе падают ошибки
-    return response.data;
-  }
-  return [];
+  // Нашел ошибку
+  return response.data.data;
 };
 
 export const addLike = async (id: string, accessToken: string) => {

@@ -14,7 +14,6 @@ export default function MusicLayout({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    //Локалки нет поэтому проверяем дополнительно
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('accessToken');
       if (!token) {
@@ -24,7 +23,6 @@ export default function MusicLayout({ children }: { children: ReactNode }) {
       }
     }
   }, [router]);
-  // Позволяет ждать прогрузки
   if (!isAuthenticated) {
     return null;
   }

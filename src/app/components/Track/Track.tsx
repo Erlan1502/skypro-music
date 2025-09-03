@@ -34,6 +34,10 @@ export default function Track({
     dispatch(setCurrentPlaylist(tracks));
     dispatch(setIsPlay(true));
   };
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleLike();
+  };
 
   return (
     <div className={styles.playlist__track} onClick={handleClick}>
@@ -55,7 +59,7 @@ export default function Track({
       </div>
       <div className={styles.track__author}>{track.author}</div>
       <div className={styles.track__album}>{track.album}</div>
-      <div className={styles.track__time} onClick={toggleLike}>
+      <div className={styles.track__time} onClick={handleLikeClick}>
         <svg
           className={`${styles.track__timeSvg} ${styles.btnIcon} ${track.liked ? styles.liked : ''}`}
         >
