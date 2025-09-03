@@ -4,6 +4,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '../../../store/store';
+import { clearUser } from '../../../store/features/authSlice';
 
 export default function Navigation() {
   const [isOnBurger, setConditionBurger] = useState<boolean>(false);
@@ -11,7 +13,9 @@ export default function Navigation() {
     setConditionBurger(!isOnBurger);
   };
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const handleLogout = () => {
+  dispatch(clearUser());
   localStorage.removeItem('username');
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');

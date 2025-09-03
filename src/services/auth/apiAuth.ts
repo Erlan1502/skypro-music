@@ -53,10 +53,10 @@ export const getTokens = (data: authUserProps): Promise<TokenResponse> => {
     .then((response) => response.data);
 };
 export const refreshTokens = (
-  data: authUserProps,
+  refresh: string,
 ): Promise<accessTokenType> => {
   return axios
-    .post(`${API_BASE_URL}/user/token/refresh`, data, {
+    .post(`${API_BASE_URL}/user/token/refresh`, { refresh }, {
       headers: {
         'content-type': 'application/json',
       },
