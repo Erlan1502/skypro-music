@@ -139,10 +139,10 @@
   stroke: #696969;
 }
 .player__btnRepeatSvg_active {
-    width: 18px;
-    height: 12px;
-    fill: transparent;
-    stroke: #ffffff;
+  width: 18px;
+  height: 12px;
+  fill: transparent;
+  stroke: #ffffff;
 }
 
 .player__btnShuffleSvg {
@@ -152,10 +152,10 @@
   stroke: #696969;
 }
 .player__btnShuffleSvg_active {
-    width: 19px;
-    height: 12px;
-    fill: transparent;
-    stroke: #ffffff;
+  width: 19px;
+  height: 12px;
+  fill: transparent;
+  stroke: #ffffff;
 }
 
 /* Стили для текущего трека */
@@ -266,7 +266,11 @@
   fill: transparent;
   stroke: #696969;
 }
-
+.trackPlay__likeSvg {
+  width: 14.34px;
+  height: 13px;
+  fill: rgba(182, 114, 255, 1);
+}
 /* Стили для регулятора громкости */
 .volume__content {
   display: -webkit-box;
@@ -335,7 +339,6 @@
 }
 
 .btnIcon:hover svg {
-  fill: transparent;
   stroke: #acacac;
   cursor: pointer;
 }
@@ -351,4 +354,11 @@
   fill: #696969;
   stroke: #ffffff;
   cursor: pointer;
+}
+.btnIcon_disabled:hover svg {
+  stroke: #696969;
+  cursor: not-allowed;
+}
+.btnIcon_disabled:active svg {
+  stroke: #696969;
 }
