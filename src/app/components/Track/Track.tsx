@@ -67,9 +67,12 @@ export default function Track({
       </div>
       <div className={styles.track__author}>{track.author}</div>
       <div className={styles.track__album}>{track.album}</div>
-      <div className={styles.track__time} onClick={handleLikeClick}>
+      <div
+        className={`${styles.track__time} ${!accessToken ? styles.btnIcon_disabled : ''}`}
+        onClick={handleLikeClick}
+      >
         <svg
-          className={`${styles.track__timeSvg} ${styles.btnIcon} ${track.liked ? styles.liked : ''} ${isLike ? styles.trackPlay__likeSvg : styles.trackPlay__dislikeSvg}`}
+          className={`${styles.track__timeSvg} ${styles.btnIcon} ${track.liked ? styles.liked : ''} ${isLike ? styles.trackPlay__likeSvg : styles.trackPlay__dislikeSvg} `}
         >
           <use xlinkHref={`/img/icon/sprite.svg#${getLikeIcon()}`}></use>
         </svg>
