@@ -12,7 +12,7 @@ export interface Track {
   duration: string;
   liked?: boolean;
   track_file: string;
-  stared_user: any[];
+  stared_user: unknown[];
 }
 
 export interface ApiResponse {

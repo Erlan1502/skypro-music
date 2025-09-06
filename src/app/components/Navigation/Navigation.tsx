@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '../../../store/store';
 import { logout } from '../../../store/features/authSlice';
+import { clearAuthData } from '../../../services/auth/apiAuth';
 
 export default function Navigation() {
   const [isOnBurger, setConditionBurger] = useState<boolean>(false);
@@ -16,9 +17,7 @@ export default function Navigation() {
   const dispatch = useAppDispatch();
   const handleLogout = () => {
     dispatch(logout());
-    localStorage.removeItem('username');
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    clearAuthData();
     router.push('/auth/SignIn');
   };
   return (

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { clearAuthData } from '../../../services/auth/apiAuth';
 
 export default function Sidebar() {
   const router = useRouter();
@@ -18,9 +19,7 @@ export default function Sidebar() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('username');
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    clearAuthData();
     router.push('/auth/SignIn');
   };
 
@@ -44,6 +43,7 @@ export default function Sidebar() {
                 alt="day's playlist"
                 width={250}
                 height={170}
+                priority
               />
             </Link>
           </div>
@@ -55,6 +55,7 @@ export default function Sidebar() {
                 alt="day's playlist"
                 width={250}
                 height={170}
+                priority
               />
             </Link>
           </div>
@@ -66,6 +67,7 @@ export default function Sidebar() {
                 alt="day's playlist"
                 width={250}
                 height={170}
+                priority
               />
             </Link>
           </div>

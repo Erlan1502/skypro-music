@@ -64,3 +64,9 @@ export const refreshTokens = (refresh: string): Promise<accessTokenType> => {
     )
     .then((response) => response.data);
 };
+
+export const clearAuthData = () => {
+  localStorage.removeItem('username');
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+};
