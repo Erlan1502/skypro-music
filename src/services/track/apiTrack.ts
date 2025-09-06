@@ -2,7 +2,7 @@ import axios from 'axios';
 const API_BASE_URL = 'https://webdev-music-003b5b991590.herokuapp.com';
 
 export interface Track {
-  _id: number; // исходя из респонса
+  _id: number;
   name: string;
   author: string;
   release_date: string;
@@ -57,7 +57,6 @@ export const getFavoriteTracks = async (
       },
     },
   );
-  // Нашел ошибку
   return response.data.data;
 };
 

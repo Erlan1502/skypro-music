@@ -13,14 +13,11 @@ export const makeStore = () => {
   });
 };
 
-// Infer the type of makeStore
 export type AppStore = ReturnType<typeof makeStore>;
 
-// Infer the \`RootState\` and \`AppDispatch\` types from the store itself
 type RootState = ReturnType<AppStore['getState']>;
 export type AppDispatch = AppStore['dispatch'];
 
-// Для старого TS
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const useAppStore: () => AppStore = useStore;

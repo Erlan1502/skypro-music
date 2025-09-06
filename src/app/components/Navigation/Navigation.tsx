@@ -59,7 +59,6 @@ export default function Navigation() {
                 Выйти
               </Link>
             </li>
-            {/* Вернули и изменили на "Выйти" */}
           </ul>
         </div>
       )}

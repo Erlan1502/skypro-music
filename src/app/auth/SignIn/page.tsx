@@ -17,14 +17,12 @@ export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
 
-  // ПРОВЕРКА АВТОРИЗАЦИИ
   useEffect(() => {
     if (localStorage.getItem('accessToken')) {
       router.push('/music/main');
     }
   }, [router]);
 
-  // СБРОС ОШИБКИ
   useEffect(() => {
     setErrorMessage('');
   }, [email, password]);

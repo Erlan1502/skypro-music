@@ -7,7 +7,6 @@ import Search from '../Search/Search';
 import Filter from '../Filter/Filter';
 import { Track } from '../../../services/track/apiTrack';
 
-// Определяем props для компонента
 interface CenterblockProps {
   tracks: Track[];
   title: string;

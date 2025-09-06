@@ -21,8 +21,6 @@ interface TokenResponse {
 
 type accessTokenType = Pick<TokenResponse, 'access'>;
 
-type refreshTokenType = Pick<TokenResponse, 'refresh'>;
-
 export const signUpUser = (data: SignUpUsers): Promise<authUserReturn> => {
   return axios
     .post(`${API_BASE_URL}/user/signup/`, data, {

@@ -16,7 +16,6 @@ export default function SignUp() {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // ПРОВЕРКА АВТОРИЗАЦИИ
   useEffect(() => {
     if (localStorage.getItem('accessToken')) {
       router.push('/music/main');

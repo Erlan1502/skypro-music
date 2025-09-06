@@ -79,27 +79,23 @@ export default function Bar() {
     }
   }, [isPlaying]);
 
-  // Громкость
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
     }
   }, [volume]);
 
-  // Луп
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.loop = isLoop;
     }
   }, [isLoop]);
 
-  // Пауза
   const handlePlayPause = () => {
     if (!currentTrack) return;
     dispatch(setIsPlay(!isPlaying));
   };
 
-  // Перемотка
   const handleSeek = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (audioRef.current) {
       audioRef.current.currentTime = Number(event.target.value);
@@ -225,7 +221,6 @@ export default function Bar() {
                   className={classnames(
                     styles.trackPlay__likeBtn,
                     styles.btnIcon,
-                    // ЕСЛИ НЕТ АВТОРИЗАЦИИ
                     { [styles.btnIcon_disabled]: !accessToken },
                   )}
                 >

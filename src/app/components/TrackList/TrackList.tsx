@@ -9,7 +9,6 @@ interface TrackListProps {
 }
 
 export default function TrackList({ tracks }: TrackListProps) {
-  //Логика обработки отсутствия массива треков.
   if (!tracks) {
     return <div className={styles.content__playlist}>Загрузка треков...</div>;
   }
