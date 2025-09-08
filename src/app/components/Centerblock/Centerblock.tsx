@@ -1,40 +1,29 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import styles from './centerblock.module.css';
 import classnames from 'classnames';
 import TrackList from '../TrackList/TrackList';
 import Search from '../Search/Search';
 import Filter from '../Filter/Filter';
-import { getAllTracks, Track, ApiResponse } from '../../../services/api';
+import { Track } from '../../../services/track/apiTrack';
 
-export default function Centerblock() {
-  const [tracks, setTracks] = useState<Track[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+interface CenterblockProps {
+  tracks: Track[];
+  title: string;
+  isLoading: boolean;
+  error: string | null;
+}
 
-  useEffect(() => {
-    const fetchTracks = async () => {
-      try {
-        const data: ApiResponse = await getAllTracks();
-        setTracks(data.data);
-        console.log('Данные: ', data); // Проверка undefined ушел после изменения типизации ApiResponse.
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : 'Не удалось загрузить треки',
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchTracks();
-  }, []);
-
+export default function Centerblock({
+  tracks,
+  title,
+  isLoading,
+  error,
+}: CenterblockProps) {
   return (
     <div className={styles.centerblock}>
       <Search />
-      <h2 className={styles.centerblock__h2}>Треки</h2>
+      <h2 className={styles.centerblock__h2}>{title}</h2>
       <Filter tracks={tracks} />
       <div className={styles.centerblock__content}>
         <div className={styles.content__title}>

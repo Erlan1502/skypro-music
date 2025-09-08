@@ -3,14 +3,18 @@ import styles from './bar.module.css';
 import classnames from 'classnames';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { useEffect, useRef, useState } from 'react';
-import { setIsPlay, playNextTrack, playPrevTrack, toggleShuffle } from '../../../store/features/trackSlice';
-
-
+import {
+  setIsPlay,
+  playNextTrack,
+  playPrevTrack,
+  toggleShuffle,
+} from '../../../store/features/trackSlice';
+import { useLikeTrack } from '@/hooks/useLikeTracks';
 const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-}
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+};
 
 export default function Bar() {
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
@@ -18,32 +22,38 @@ export default function Bar() {
   const isShuffle = useAppSelector((state) => state.tracks.isShuffle);
   const dispatch = useAppDispatch();
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
+  const { toggleLike, isLike, isLoading } = useLikeTrack(currentTrack);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.5);
   const [isLoop, setIsLoop] = useState(false);
-
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    setAccessToken(token);
+  }, []);
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !currentTrack) return;
     audio.src = currentTrack.track_file;
     audio.load();
-    
+
     const handleCanPlay = () => {
       if (isPlaying) {
-        audio.play().catch((error) => console.error('Ошибка воспроизведения:', error));
+        audio
+          .play()
+          .catch((error) => console.error('Ошибка воспроизведения:', error));
       }
       setDuration(audio.duration);
     };
 
     const handleTimeUpdate = () => {
-        setCurrentTime(audio.currentTime);
-    }
+      setCurrentTime(audio.currentTime);
+    };
 
     const handleEnded = () => {
-        dispatch(playNextTrack());
-    }
+      dispatch(playNextTrack());
+    };
 
     audio.addEventListener('canplay', handleCanPlay);
     audio.addEventListener('timeupdate', handleTimeUpdate);
@@ -65,56 +75,75 @@ export default function Bar() {
     }
 
     if (isPlaying) {
-      audio.play().catch((error) => console.error('Ошибка воспроизведения:', error));
+      audio
+        .play()
+        .catch((error) => console.error('Ошибка воспроизведения:', error));
     } else {
       audio.pause();
     }
   }, [isPlaying]);
-  
-  // Громкость
+
   useEffect(() => {
-      if(audioRef.current) {
-          audioRef.current.volume = volume;
-      }
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
   }, [volume]);
 
-  // Луп
   useEffect(() => {
-    if(audioRef.current) {
-        audioRef.current.loop = isLoop;
+    if (audioRef.current) {
+      audioRef.current.loop = isLoop;
     }
   }, [isLoop]);
 
-
-  // Пауза
   const handlePlayPause = () => {
     if (!currentTrack) return;
     dispatch(setIsPlay(!isPlaying));
   };
 
-  // Перемотка
   const handleSeek = (event: React.ChangeEvent<HTMLInputElement>) => {
-      if(audioRef.current) {
-          audioRef.current.currentTime = Number(event.target.value);
-      }
-  }
+    if (audioRef.current) {
+      audioRef.current.currentTime = Number(event.target.value);
+    }
+  };
+
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!accessToken) {
+      return;
+    }
+    if (isLoading) return;
+    toggleLike();
+  };
+  const handleLikeClickWithoutAccess = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    alert(
+      'Неавторизованные пользователи не могут оставлять лайк, пожалуйста авторизуйтесь.',
+    );
+  };
 
   if (!currentTrack) return null;
+
+  const getLikeIcon = () => {
+    if (!accessToken) {
+      return 'icon-dislike';
+    }
+    return 'icon-like';
+  };
 
   return (
     <div className={styles.bar}>
       <audio ref={audioRef} style={{ display: 'none' }} />
       <div className={styles.bar__content}>
         <div className={styles.bar__playerProgress_time}>
-            {formatTime(currentTime)} / {formatTime(duration)}
+          {formatTime(currentTime)} / {formatTime(duration)}
         </div>
-        <input 
-            type="range" 
-            min="0"
-            max={duration}
-            value={currentTime}
-            onChange={handleSeek}
-            className={styles.bar__playerProgress}
+        <input
+          type="range"
+          min="0"
+          max={duration}
+          value={currentTime}
+          onChange={handleSeek}
+          className={styles.bar__playerProgress}
         />
         <div className={styles.bar__playerBlock}>
           <div className={styles.bar__player}>
@@ -149,7 +178,13 @@ export default function Bar() {
                 className={classnames(styles.player__btnRepeat, styles.btnIcon)}
                 onClick={() => setIsLoop(!isLoop)}
               >
-                <svg className={isLoop ? styles.player__btnRepeatSvg_active : styles.player__btnRepeatSvg}>
+                <svg
+                  className={
+                    isLoop
+                      ? styles.player__btnRepeatSvg_active
+                      : styles.player__btnRepeatSvg
+                  }
+                >
                   <use href="/img/icon/sprite.svg#icon-repeat"></use>
                 </svg>
               </div>
@@ -160,7 +195,13 @@ export default function Bar() {
                 )}
                 onClick={() => dispatch(toggleShuffle())}
               >
-                <svg className={isShuffle ? styles.player__btnShuffleSvg_active : styles.player__btnShuffleSvg}>
+                <svg
+                  className={
+                    isShuffle
+                      ? styles.player__btnShuffleSvg_active
+                      : styles.player__btnShuffleSvg
+                  }
+                >
                   <use href="/img/icon/sprite.svg#icon-shuffle"></use>
                 </svg>
               </div>
@@ -186,23 +227,20 @@ export default function Bar() {
               </div>
               <div className={styles.trackPlay__dislike}>
                 <div
+                  onClick={
+                    accessToken ? handleLikeClick : handleLikeClickWithoutAccess
+                  }
                   className={classnames(
-                    styles.player__btnShuffle,
+                    styles.trackPlay__likeBtn,
                     styles.btnIcon,
                   )}
                 >
-                  <svg className={styles.trackPlay__likeSvg}>
-                    <use xlinkHref="/img/icon/sprite.svg#icon-like"></use>
-                  </svg>
-                </div>
-                <div
-                  className={classnames(
-                    styles.trackPlay__dislike,
-                    styles.btnIcon,
-                  )}
-                >
-                  <svg className={styles.trackPlay__dislikeSvg}>
-                    <use xlinkHref="/img/icon/sprite.svg#icon-dislike"></use>
+                  <svg
+                    className={`${isLike ? styles.trackPlay__likeSvg : styles.trackPlay__dislikeSvg}`}
+                  >
+                    <use
+                      xlinkHref={`/img/icon/sprite.svg#${getLikeIcon()}`}
+                    ></use>
                   </svg>
                 </div>
               </div>
