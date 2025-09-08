@@ -27,7 +27,11 @@ export default function Bar() {
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.5);
   const [isLoop, setIsLoop] = useState(false);
-  const accessToken = localStorage.getItem('accessToken');
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    setAccessToken(token);
+  }, []);
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !currentTrack) return;
@@ -109,6 +113,12 @@ export default function Bar() {
     }
     if (isLoading) return;
     toggleLike();
+  };
+  const handleLikeClickWithoutAccess = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    alert(
+      'Неавторизованные пользователи не могут оставлять лайк, пожалуйста авторизуйтесь.',
+    );
   };
 
   if (!currentTrack) return null;
@@ -217,11 +227,12 @@ export default function Bar() {
               </div>
               <div className={styles.trackPlay__dislike}>
                 <div
-                  onClick={handleLikeClick}
+                  onClick={
+                    accessToken ? handleLikeClick : handleLikeClickWithoutAccess
+                  }
                   className={classnames(
                     styles.trackPlay__likeBtn,
                     styles.btnIcon,
-                    { [styles.btnIcon_disabled]: !accessToken },
                   )}
                 >
                   <svg

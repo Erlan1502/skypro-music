@@ -3,24 +3,13 @@
 import styles from './sidebar.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { clearAuthData } from '../../../services/auth/apiAuth';
-
+import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { logout } from '../../../store/features/authSlice';
 export default function Sidebar() {
-  const router = useRouter();
-  const [username, setUsername] = useState<string | null>(null);
-
-  useEffect(() => {
-    const user = localStorage.getItem('username');
-    if (user) {
-      setUsername(user);
-    }
-  }, []);
-
+  const dispatch = useAppDispatch();
+  const username = useAppSelector((state) => state.auth.username);
   const handleLogout = () => {
-    clearAuthData();
-    router.push('/auth/SignIn');
+    dispatch(logout());
   };
 
   return (

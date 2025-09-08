@@ -47,6 +47,12 @@ export default function Track({
     }
     return 'icon-like';
   };
+  const handleLikeClickWithoutAccess = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    alert(
+      'Неавторизованные пользователи не могут оставлять лайк, пожалуйста авторизуйтесь.',
+    );
+  };
   return (
     <div className={styles.playlist__track} onClick={handleClick}>
       <div className={styles.track__title}>
@@ -68,8 +74,8 @@ export default function Track({
       <div className={styles.track__author}>{track.author}</div>
       <div className={styles.track__album}>{track.album}</div>
       <div
-        className={`${styles.track__time} ${!accessToken ? styles.btnIcon_disabled : ''}`}
-        onClick={handleLikeClick}
+        className={`${styles.track__time}`}
+        onClick={accessToken ? handleLikeClick : handleLikeClickWithoutAccess}
       >
         <svg
           className={`${styles.track__timeSvg} ${styles.btnIcon} ${track.liked ? styles.liked : ''} ${isLike ? styles.trackPlay__likeSvg : styles.trackPlay__dislikeSvg} `}
