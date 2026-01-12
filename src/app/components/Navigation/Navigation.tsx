@@ -1,13 +1,25 @@
-'use client'
+'use client';
 import styles from './navigation.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '../../../store/store';
+import { logout } from '../../../store/features/authSlice';
 
 export default function Navigation() {
   const [isOnBurger, setConditionBurger] = useState<boolean>(false);
   const handleClick = () => {
     setConditionBurger(!isOnBurger);
+  };
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const handleLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem('username');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    router.push('/auth/SignIn');
   };
   return (
     <nav className={styles.main__nav}>
@@ -26,25 +38,31 @@ export default function Navigation() {
         <span className={styles.burger__line}></span>
       </div>
       {isOnBurger && (
-      <div className={styles.nav__menu}>
-        <ul className={styles.menu__list}>
-          <li className={styles.menu__item}>
-            <Link href="#" className={styles.menu__link}>
-              Главное
-            </Link>
-          </li>
-          <li className={styles.menu__item}>
-            <Link href="#" className={styles.menu__link}>
-              Мой плейлист
-            </Link>
-          </li>
-          <li className={styles.menu__item}>
-            <Link href="../signin.html" className={styles.menu__link}>
-              Войти
-            </Link>
-          </li>
-        </ul>
-      </div>)}
+        <div className={styles.nav__menu}>
+          <ul className={styles.menu__list}>
+            <li className={styles.menu__item}>
+              <Link href="/music/main" className={styles.menu__link}>
+                Главное
+              </Link>
+            </li>
+            <li className={styles.menu__item}>
+              <Link href="/music/favorites" className={styles.menu__link}>
+                Мой плейлист
+              </Link>
+            </li>
+            <li className={styles.menu__item}>
+              <Link
+                href="/auth/SignIn"
+                onClick={handleLogout}
+                className={styles.menu__link}
+              >
+                Выйти
+              </Link>
+            </li>
+            {/* Вернули и изменили на "Выйти" */}
+          </ul>
+        </div>
+      )}
     </nav>
   );
 }

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styles from './filter.module.css';
 import FilterItem from '../FilterItem/FilterItem';
 import classNames from 'classnames';
-import { Track } from '../../../services/api';
+import { Track } from '../../../services/track/apiTrack';
 
 type FilterKey = 'author' | 'release_date' | 'genre';
 
