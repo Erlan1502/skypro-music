@@ -3,14 +3,18 @@ import styles from './bar.module.css';
 import classnames from 'classnames';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { useEffect, useRef, useState } from 'react';
-import { setIsPlay, playNextTrack, playPrevTrack, toggleShuffle } from '../../../store/features/trackSlice';
-
+import {
+  setIsPlay,
+  playNextTrack,
+  playPrevTrack,
+  toggleShuffle,
+} from '../../../store/features/trackSlice';
 
 const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-}
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60);
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+};
 
 export default function Bar() {
   const currentTrack = useAppSelector((state) => state.tracks.currentTrack);
@@ -29,21 +33,23 @@ export default function Bar() {
     if (!audio || !currentTrack) return;
     audio.src = currentTrack.track_file;
     audio.load();
-    
+
     const handleCanPlay = () => {
       if (isPlaying) {
-        audio.play().catch((error) => console.error('Ошибка воспроизведения:', error));
+        audio
+          .play()
+          .catch((error) => console.error('Ошибка воспроизведения:', error));
       }
       setDuration(audio.duration);
     };
 
     const handleTimeUpdate = () => {
-        setCurrentTime(audio.currentTime);
-    }
+      setCurrentTime(audio.currentTime);
+    };
 
     const handleEnded = () => {
-        dispatch(playNextTrack());
-    }
+      dispatch(playNextTrack());
+    };
 
     audio.addEventListener('canplay', handleCanPlay);
     audio.addEventListener('timeupdate', handleTimeUpdate);
@@ -65,26 +71,27 @@ export default function Bar() {
     }
 
     if (isPlaying) {
-      audio.play().catch((error) => console.error('Ошибка воспроизведения:', error));
+      audio
+        .play()
+        .catch((error) => console.error('Ошибка воспроизведения:', error));
     } else {
       audio.pause();
     }
   }, [isPlaying]);
-  
+
   // Громкость
   useEffect(() => {
-      if(audioRef.current) {
-          audioRef.current.volume = volume;
-      }
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
   }, [volume]);
 
   // Луп
   useEffect(() => {
-    if(audioRef.current) {
-        audioRef.current.loop = isLoop;
+    if (audioRef.current) {
+      audioRef.current.loop = isLoop;
     }
   }, [isLoop]);
-
 
   // Пауза
   const handlePlayPause = () => {
@@ -94,10 +101,10 @@ export default function Bar() {
 
   // Перемотка
   const handleSeek = (event: React.ChangeEvent<HTMLInputElement>) => {
-      if(audioRef.current) {
-          audioRef.current.currentTime = Number(event.target.value);
-      }
-  }
+    if (audioRef.current) {
+      audioRef.current.currentTime = Number(event.target.value);
+    }
+  };
 
   if (!currentTrack) return null;
 
@@ -106,15 +113,15 @@ export default function Bar() {
       <audio ref={audioRef} style={{ display: 'none' }} />
       <div className={styles.bar__content}>
         <div className={styles.bar__playerProgress_time}>
-            {formatTime(currentTime)} / {formatTime(duration)}
+          {formatTime(currentTime)} / {formatTime(duration)}
         </div>
-        <input 
-            type="range" 
-            min="0"
-            max={duration}
-            value={currentTime}
-            onChange={handleSeek}
-            className={styles.bar__playerProgress}
+        <input
+          type="range"
+          min="0"
+          max={duration}
+          value={currentTime}
+          onChange={handleSeek}
+          className={styles.bar__playerProgress}
         />
         <div className={styles.bar__playerBlock}>
           <div className={styles.bar__player}>
@@ -149,7 +156,13 @@ export default function Bar() {
                 className={classnames(styles.player__btnRepeat, styles.btnIcon)}
                 onClick={() => setIsLoop(!isLoop)}
               >
-                <svg className={isLoop ? styles.player__btnRepeatSvg_active : styles.player__btnRepeatSvg}>
+                <svg
+                  className={
+                    isLoop
+                      ? styles.player__btnRepeatSvg_active
+                      : styles.player__btnRepeatSvg
+                  }
+                >
                   <use href="/img/icon/sprite.svg#icon-repeat"></use>
                 </svg>
               </div>
@@ -160,7 +173,13 @@ export default function Bar() {
                 )}
                 onClick={() => dispatch(toggleShuffle())}
               >
-                <svg className={isShuffle ? styles.player__btnShuffleSvg_active : styles.player__btnShuffleSvg}>
+                <svg
+                  className={
+                    isShuffle
+                      ? styles.player__btnShuffleSvg_active
+                      : styles.player__btnShuffleSvg
+                  }
+                >
                   <use href="/img/icon/sprite.svg#icon-shuffle"></use>
                 </svg>
               </div>

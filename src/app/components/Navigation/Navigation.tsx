@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import styles from './navigation.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -26,25 +26,27 @@ export default function Navigation() {
         <span className={styles.burger__line}></span>
       </div>
       {isOnBurger && (
-      <div className={styles.nav__menu}>
-        <ul className={styles.menu__list}>
-          <li className={styles.menu__item}>
-            <Link href="#" className={styles.menu__link}>
-              Главное
-            </Link>
-          </li>
-          <li className={styles.menu__item}>
-            <Link href="#" className={styles.menu__link}>
-              Мой плейлист
-            </Link>
-          </li>
-          <li className={styles.menu__item}>
-            <Link href="../signin.html" className={styles.menu__link}>
-              Войти
-            </Link>
-          </li>
-        </ul>
-      </div>)}
+        <div className={styles.nav__menu}>
+          <ul className={styles.menu__list}>
+            <li className={styles.menu__item}>
+              <Link href="/music/main" className={styles.menu__link}>
+                Главное
+              </Link>
+            </li>
+            <li className={styles.menu__item}>
+              <Link href="#" className={styles.menu__link}>
+                Мой плейлист
+              </Link>
+            </li>
+            {/* <li className={styles.menu__item}>
+              <Link href="/auth/SignIn.html" className={styles.menu__link}>
+                Войти
+              </Link>
+            </li> т.к. мы даем дальнейший доступ ТОЛЬКО АВТОРИЗИРОВАННЫМ 
+            пользователям, то и смысла в этом разделе нет*/}
+          </ul>
+        </div>
+      )}
     </nav>
   );
 }
